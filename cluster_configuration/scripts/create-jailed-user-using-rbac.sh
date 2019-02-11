@@ -10,8 +10,6 @@
 
 [ $# != 1 ] && echo "Usage: $0 <username>" && exit 1
 
-exit 0
-
 USER_ACCOUNT=${1}
 
 cat <<EOF | kubectl apply -f -
@@ -78,7 +76,7 @@ echo "Certificate: ${USER_CERT}"
 
 # Get current cluster URL
 CURRENT_CLUSTER_CONTEXT=$(kubectl config current-context)
-CURRENT_CLUSTER_URL=$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"$CURRENT_CLUSTER\")].cluster.server}")
+CURRENT_CLUSTER_URL=$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"$CURRENT_CLUSTER_CONTEXT\")].cluster.server}")
 # After this you should create the kubeconfig file. You may use the kubectl command or the template below
 cat <<EOF >${USER_ACCOUNT}-config
 apiVersion: v1
@@ -90,14 +88,14 @@ clusters:
 contexts:
 - context:
     cluster: playground
-    namespace: dvidal
-    user: rafles
+    namespace: ${USER_ACCOUNT}
+    user: ${USER_ACCOUNT}
   name: playground
 current-context: playground
 kind: Config
 preferences: {}
 users:
-- name: rafles
+- name: ${USER_ACCOUNT}
   user:
     client-key-data: ${USER_CERT}
     token: ${USER_TOKEN}
