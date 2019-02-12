@@ -1,0 +1,14 @@
+---
+
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: minio-issuer-production
+  namespace: minio
+spec:
+  acme:
+    email: dvsquash@gmail.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: minio-issuer-production-letsencrypt
+    http01: {}
