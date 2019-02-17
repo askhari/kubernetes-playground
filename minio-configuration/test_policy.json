@@ -1,0 +1,15 @@
+{
+    "Statement": [
+        {
+            "Action": [
+                "s3:*"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::test/*",
+                "arn:aws:s3:::test"
+            ]
+        }
+    ],
+    "Version": "2012-10-17"
+}
