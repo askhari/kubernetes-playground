@@ -2,5 +2,6 @@ cluster_configuration/users
 cluster_configuration/helm-certs
 cluster_configuration/secured_config
 
-# ansible configs
+# Confidential folders
 ansible/confidential
+minio/confidential
