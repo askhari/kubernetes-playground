@@ -1,0 +1,20 @@
+---
+
+- hosts: localhost
+  connection: local
+  vars:
+    k8s_context: do-fra1-k8s-playground
+    k8s_kubeconfig: "~/.kube/config"
+
+  tasks:
+    - name: "Get kubernetes facts"
+      k8s_facts:
+        kubeconfig: "{{ k8s_kubeconfig }}"
+        context: "{{ k8s_context }}"
+        kind: secrets
+        namespace: joaluque
+      register: joaluque_secret
+
+    - name: "Debug"
+      debug:
+        var: joaluque_secret
