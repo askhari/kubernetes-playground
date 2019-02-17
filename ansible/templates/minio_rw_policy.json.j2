@@ -1,0 +1,15 @@
+{
+    "Statement": [
+        {
+            "Action": [
+                "s3:*"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::{{ minio_user }}/*",
+                "arn:aws:s3:::{{ minio_user }}"
+            ]
+        }
+    ],
+    "Version": "2012-10-17"
+}

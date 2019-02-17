@@ -1,0 +1,51 @@
+---
+
+## TODO: Add validations
+
+- hosts: localhost
+  connection: local
+  vars:
+    minio_policy_path: "../confidential/minio/policies/{{ minio_server }}_{{ minio_user }}_policy.json"
+    minio_user_passwordfile: "../confidential/minio/users/{{ minio_server }}_{{ minio_user }}_passwordfile"
+    minio_policy_name: "{{ minio_user }}_rw"
+
+  tasks:
+    - name: "Verify we have all needed information and variables."
+      assert:
+        that:
+          - minio_server is defined
+          - minio_user is defined
+
+    - name: "Check if bucket exits"
+      shell: mc stat {{ minio_server }}/{{ minio_user }} --json
+      ignore_errors: yes
+      register: result_check_bucket
+
+    - name: "Set result fact"
+      set_fact:
+        check_bucket: "{{ result_check_bucket.stdout | from_json }}"
+
+    - name: "Create {{ minio_user }} bucket"
+      shell: "mc mb {{ minio_server }}/{{ minio_user }}"
+      register: result_bucket
+      when: check_bucket.status == 'error'
+
+    - debug:
+        var: result_bucket
+
+    - name: "Render minio policy"
+      template:
+        src: ../templates/minio_rw_policy.json.j2
+        dest: "{{ minio_policy_path }}"
+        mode: 0644
+
+    - name: "Create {{ minio_user }} bucket policy"
+      shell: "mc admin policy add {{ minio_server }} {{ minio_policy_name }} {{ minio_policy_path }}"
+
+    - name: "Set fact user password"
+      set_fact:
+        minio_user_password: "{{ lookup('password', minio_user_passwordfile ~ ' chars=ascii_letters,digits') }}"
+
+    - name: "Create {{ minio_user }}"
+      shell: "mc admin user add {{ minio_server }} {{ minio_user }} {{ minio_user_password }} {{ minio_policy_name }}"
+
