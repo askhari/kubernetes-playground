@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    certmanager.k8s.io/issuer: minio-issuer-production
+    kubernetes.io/ingress.class: nginx
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: minio
+    chart: minio-2.4.2
+    heritage: Tiller
+    release: minio-storage
+  name: minio-storage
+  selfLink: /apis/extensions/v1beta1/namespaces/minio/ingresses/minio-storage
+spec:
+  rules:
+  - host: minio.askharilabs.tech
+    http:
+      paths:
+      - backend:
+          serviceName: minio-storage
+          servicePort: 9000
+        path: /
+  tls:
+  - hosts:
+    - minio.askharilabs.tech
+    secretName: minio-ingress-cert
+status:
+  loadBalancer: {}
