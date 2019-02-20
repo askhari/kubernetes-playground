@@ -1,0 +1,23 @@
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/issuer: argo-issuer-production
+  name: argo-ingress
+  namespace: argo
+spec:
+  rules:
+  - host: argo.askharilabs.tech
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: argo-ui
+          servicePort: 80
+  tls:
+  - hosts:
+    - argo.askharilabs.tech
+    secretName: argo-ingress-cert

@@ -5,3 +5,4 @@ cluster_configuration/secured_config
 # Confidential folders
 ansible/confidential
 minio/confidential
+argo/confidential

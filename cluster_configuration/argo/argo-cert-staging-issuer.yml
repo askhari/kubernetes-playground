@@ -1,0 +1,14 @@
+---
+
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: argo-issuer-staging
+  namespace: argo
+spec:
+  acme:
+    email: dvsquash@gmail.com
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: argo-issuer-staging-letsencrypt
+    http01: {}
