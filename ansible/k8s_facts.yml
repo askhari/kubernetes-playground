@@ -3,7 +3,7 @@
 - hosts: localhost
   connection: local
   vars:
-    k8s_context: do-fra1-k8s-playground
+    k8s_context: cluster-lain
     k8s_kubeconfig: "~/.kube/config"
 
   tasks:

@@ -3,7 +3,7 @@
 - hosts: localhost
   connection: local
   vars:
-    k8s_context: do-fra1-k8s-playground
+    k8s_context: cluster-lain
     k8s_kubeconfig: "~/.kube/config"
     k8s_namespace: "{{ namespace }}"
     k8s_username: "{{ k8s_user }}"
@@ -66,3 +66,14 @@
       when:
         - is_admin is defined
         - is_admin == 'true'
+
+    - name: "Granting admin permissions"
+      k8s:
+        kubeconfig: "{{ k8s_kubeconfig }}"
+        context: "{{ k8s_context }}"
+        definition: "{{ lookup('template', 'templates/namespace_admin_rolebinding.yml') }}"
+        state: "{{ state | default('present') }}"
+      when:
+        - is_admin is not defined
+
+
