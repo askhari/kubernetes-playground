@@ -3,7 +3,7 @@
 - hosts: localhost
   connection: local
   vars:
-    k8s_context: cluster-lain
+    k8s_context: "{{ k8s_target_context }}"
     k8s_kubeconfig: "~/.kube/config"
     k8s_namespace: "{{ namespace }}"
     k8s_username: "{{ k8s_user }}"
@@ -27,9 +27,23 @@
         state: "{{ state | default('present') }}"
       register: result_k8s_username
 
+    - name: Get an existing Service object
+      k8s_facts:
+        api_version: v1
+        kind: ServiceAccount
+        name: "{{ k8s_username }}"
+        namespace: "{{ k8s_username }}"
+      register: user_service_account_facts
+
+    - name: "Debug {{ k8s_username }} service account facts"
+      debug:
+        var: user_service_account_facts
+        verbosity: 4
+
     - name: "Debug {{ k8s_username }} service account"
       debug:
         var: result_k8s_username
+        verbosity: 4
 
     - block:
       - name: "Get kubernetes facts"
@@ -38,12 +52,13 @@
           context: "{{ k8s_context }}"
           kind: secrets
           namespace: "{{ k8s_namespace }}"
-          name: "{{ result_k8s_username.result.secrets[0].name }}"
+          name: "{{ user_service_account_facts.resources[0].secrets[0].name }}"
         register: result_secret
   
       - name: "Debug"
         debug:
           var: result_secret
+          verbosity: 4
   
       - name: "Retrieve information to build kubeconfig file"
         set_fact:
@@ -75,5 +90,4 @@
         state: "{{ state | default('present') }}"
       when:
         - is_admin is not defined
-
 
