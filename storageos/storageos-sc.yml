@@ -1,0 +1,14 @@
+---
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: storageos-users-sc
+provisioner: kubernetes.io/storageos
+parameters:
+  pool: users
+  description: StorageOS storage class for users
+  fsType: ext4
+  adminSecretNamespace: storageos-operator
+  adminSecretName: storage-api
+

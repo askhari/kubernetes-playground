@@ -1,0 +1,19 @@
+---
+
+apiVersion: storageos.com/v1
+kind: Job
+metadata:
+  name: cleanup-job
+  namespace: storageos-operator
+spec:
+  image: darkowlzz/cleanup:v0.0.2
+  args: ["/var/lib/storageos"]
+  mountPath: "/var/lib"
+  hostPath: "/var/lib"
+  completionWord: "done"
+  #  nodeSelectorTerms:
+  #    - matchExpressions:
+  #      - key: node-role.kubernetes.io/worker
+  #        operator: In
+  #        values:
+  #        - "true"
