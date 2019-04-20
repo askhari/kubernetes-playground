@@ -6,3 +6,5 @@ cluster_configuration/secured_config
 ansible/confidential
 minio/confidential
 argo/confidential
+storageos/confidential
+etcd/confidential

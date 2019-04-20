@@ -1,0 +1,10 @@
+---
+
+cluster:
+  join: <YOUR NODE IPs>
+
+api:
+  secretName: storage-api
+
+image:
+  tag: 1.2.0

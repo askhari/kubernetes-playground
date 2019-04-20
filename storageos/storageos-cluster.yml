@@ -1,0 +1,19 @@
+---
+
+apiVersion: storageos.com/v1
+kind: StorageOSCluster
+metadata:
+  name: askharilabs-storehouse
+  namespace: storageos-operator
+spec:
+  join: "<YOUR NODES IPs>"
+  secretRefName: storageos-api
+  secretRefNamespace: storageos-operator
+  csi:
+    enable: true
+  cleanAtDelete: true
+  kvBackend:
+    #address: "http://etcd-service.namespace.svc.cluster.local:2379"
+    address: "http://<YOUR ETCD BACKEND URL>:2379"
+    backend: "etcd"
+
